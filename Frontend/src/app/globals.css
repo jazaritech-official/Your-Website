@@ -1,0 +1,1140 @@
+@import "tailwindcss";
+@import "nprogress/nprogress.css";
+
+/* ============================================================
+   Irhas'Inn — Design Tokens (Tailwind v4 @theme)
+   ------------------------------------------------------------
+   Single source of truth for the customer-facing storefront:
+   brand colors, surfaces, semantic state colors, text hierarchy,
+   radii, elevation and motion curves.
+
+   ADDITIVE ONLY. Every existing arbitrary-value utility already in
+   the codebase (e.g. bg-[#C8A84E], text-[#222831]) keeps working
+   exactly as before — these tokens only ADD named utilities such
+   as bg-brand-gold / text-ink-muted / shadow-card for new and
+   refactored customer components.
+   ============================================================ */
+@theme {
+  /* Brand — deep navy structure + warm gold accent */
+  --color-brand-navy: #222831;
+  --color-brand-navy-deep: #1B2027;
+  --color-brand-navy-soft: #3B4257;
+  --color-brand-gold: #C8A84E;
+  --color-brand-gold-strong: #C9A227;
+  --color-brand-gold-hover: #B8943F;
+  /* Micro accent — decorative ambient use only (kept ≤10% of the field) */
+  --color-brand-accent: #C14444;
+
+  /* Surfaces */
+  --color-surface: #FFFFFF;
+  --color-surface-page: #F7F8FA;
+  --color-surface-muted: #F1F5F9;
+  --color-surface-beige: #EEEEEE;
+  --color-line: #E5E7EB;
+  --color-line-soft: #F1F3F5;
+
+  /* Text hierarchy */
+  --color-ink: #111827;
+  --color-ink-muted: #6B7280;
+  --color-ink-subtle: #9CA3AF;
+
+  /* Semantic state — meaningful use only */
+  --color-state-success: #16A34A;
+  --color-state-warning: #D97706;
+  --color-state-danger: #DC2626;
+  --color-state-info: #2563EB;
+
+  /* Radii scale — fields / cards / sheets */
+  --radius-field: 0.625rem;
+  --radius-card: 0.875rem;
+  --radius-sheet: 1rem;
+
+  /* Elevation — restrained, ambient, navy-tinted */
+  --shadow-card: 0 1px 2px rgba(34, 40, 49, 0.04), 0 4px 12px rgba(34, 40, 49, 0.05);
+  --shadow-card-hover: 0 10px 28px rgba(34, 40, 49, 0.1);
+  --shadow-sheet: 0 24px 60px rgba(34, 40, 49, 0.18);
+
+  /* Motion curves */
+  --ease-brand: cubic-bezier(0.21, 0.47, 0.32, 0.98);
+
+  /* Typography — wire the Geist families that layout.tsx already loads
+     via next/font (previously downloaded but never applied, because
+     nothing mapped --font-geist-sans onto Tailwind's font stack). */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #222831;
+  --brand-primary: #C8A84E;
+  --brand-secondary: #B8943F;
+  --brand-gold: #C8A84E;
+  --brand-gold-hover: #B8943F;
+  --brand-gold-light: rgba(200, 168, 78, 0.1);
+  --brand-gold-glow: rgba(200, 168, 78, 0.2);
+  --brand-beige: #EEEEEE;
+  --brand-cream: #FFFFFF;
+  --brand-white: #FFFFFF;
+  --brand-black: #222831;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+/* ============================================================
+   Irhas'Inn — Motion Foundation
+   Reusable keyframes + utility classes for VIP-level polish.
+   All animations use GPU-friendly properties only
+   (transform, opacity).
+   ============================================================ */
+
+/* Fade in (opacity 0 → 1) */
+@keyframes ir-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Fade in + slide up (for entrances) */
+@keyframes ir-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scale in (for modals/popovers/dropdowns) */
+@keyframes ir-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Shake (for form validation errors) */
+@keyframes ir-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+/* Pulse scale (for cart icon bounce, wishlist heart) */
+@keyframes ir-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Utility classes */
+.ir-fade-in {
+  animation: ir-fade-in 0.3s ease-out both;
+}
+
+.ir-fade-in-up {
+  animation: ir-fade-in-up 0.3s ease-out both;
+}
+
+.ir-scale-in {
+  animation: ir-scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ir-shake {
+  animation: ir-shake 0.35s ease-in-out;
+}
+
+.ir-pulse {
+  animation: ir-pulse 0.3s ease-in-out;
+}
+
+/* ============================================================
+   Prefers Reduced Motion — Accessibility
+   Disables all animations and transitions for users who
+   prefer reduced motion. Matches existing patterns in
+   AppLoader, FreeShippingProgressBar, OfflineBanner.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Order Report Printing — 3 reports per A4 page
+   The printable section (.print-reports) is hidden on screen
+   and only shown when printing. Each .order-report-block takes
+   exactly 1/3 of an A4 page height so the sheet can be cut.
+   ============================================================ */
+.print-reports {
+  display: none;
+}
+
+@media print {
+  /* Hide everything except the printable reports */
+  body * {
+    visibility: hidden;
+  }
+
+  .print-reports,
+  .print-reports * {
+    visibility: visible;
+  }
+
+  .print-reports {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Each report occupies 1/3 of an A4 page (A4 height ≈ 297mm) */
+  .order-report-block {
+    height: 99mm;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8mm 10mm;
+    border-bottom: 1px dashed #EEEEEE;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  /* Force a page break after every 3rd block (i.e. after 1st & 2nd) */
+  .order-report-block:nth-child(3n + 1):not(:first-child),
+  .order-report-block:nth-child(3n + 2) {
+    page-break-after: always;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   NProgress top route-loading bar (brand blue)
+   ============================================================ */
+#nprogress {
+  pointer-events: none;
+}
+#nprogress .bar {
+  background: #C8A84E;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 8px rgba(200, 168, 78, 0.6);
+}
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px #C8A84E, 0 0 5px #C8A84E;
+  opacity: 1;
+  transform: rotate(3deg) translate(0px, -4px);
+}
+
+/* ============================================================
+   Z-Index Hierarchy (reference)
+   ============================================================
+   10  – Base content
+   30  – Sticky header / navbar
+   40  – Mobile bottom nav
+   50  – Dropdowns inside navbar
+   60  – Mobile drawer / overlay
+   70  – Modals
+   80  – Lightbox / critical overlays
+   ============================================================ */
+
+/* Mobile bottom navigation safe-area padding */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-mobile-nav {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+@supports not (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-mobile-nav {
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* Light Framer Motion utility — keeps the bottom nav from janking */
+.bottom-nav-icon {
+  will-change: transform;
+}
+
+/* ============================================================
+   Stagger Delay Utilities
+   Apply via style={{ animationDelay: '...' }} or CSS classes
+   for staggered entrance animations on lists/grids.
+   ============================================================ */
+.ir-stagger-1 { animation-delay: 0ms; }
+.ir-stagger-2 { animation-delay: 50ms; }
+.ir-stagger-3 { animation-delay: 100ms; }
+.ir-stagger-4 { animation-delay: 150ms; }
+.ir-stagger-5 { animation-delay: 200ms; }
+.ir-stagger-6 { animation-delay: 250ms; }
+.ir-stagger-7 { animation-delay: 300ms; }
+.ir-stagger-8 { animation-delay: 350ms; }
+.ir-stagger-9 { animation-delay: 400ms; }
+.ir-stagger-10 { animation-delay: 450ms; }
+.ir-stagger-11 { animation-delay: 500ms; }
+.ir-stagger-12 { animation-delay: 550ms; }
+
+/* ============================================================
+   Button & Interactive Element Utilities
+   GPU-friendly hover/active states using transform + opacity.
+   ============================================================ */
+.ir-btn-primary {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background-color 0.2s ease;
+}
+.ir-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(200, 168, 78, 0.25);
+}
+.ir-btn-primary:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+}
+
+.ir-btn-secondary {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background-color 0.2s ease;
+}
+.ir-btn-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(34, 40, 49, 0.15);
+}
+.ir-btn-secondary:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+}
+
+/* Card hover lift — reusable for any card-like element */
+.ir-card-hover {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.ir-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(34, 40, 49, 0.08);
+}
+
+/* Image zoom on parent hover */
+.ir-img-zoom {
+  transition: transform 0.4s ease-out;
+}
+.ir-img-zoom-parent:hover .ir-img-zoom {
+  transform: scale(1.05);
+}
+
+/* Focus ring — smooth transition for form inputs and buttons */
+.ir-focus-ring {
+  transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+}
+.ir-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(200, 168, 78, 0.4);
+  border-color: #C8A84E;
+}
+
+/* Subtle tap highlight removal for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  button:active, a:active {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ============================================================
+   Checkout — Continuous Premium Multicolor Accent
+   ------------------------------------------------------------
+   One slowly drifting, brand-anchored metallic gradient used as a
+   hairline accent bar and as a moving sheen on the primary CTA.
+
+   PERFORMANCE CONTRACT (why this is free):
+   - 100% CSS. No setInterval, no requestAnimationFrame, no React
+     state, no effect — so it can NEVER trigger a React re-render.
+   - Only `background-position` (on a 3px bar) and `transform`
+     (on the sheen) are animated. No width/height/top/left, so no
+     layout is ever recalculated; the sheen is composited on the GPU.
+   - Two elements total, no particles, no canvas, no blur stacks.
+   ============================================================ */
+
+/* Metallic multi-tone drift (gold → champagne → bronze → navy → indigo) */
+@keyframes ir-checkout-flow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.ir-checkout-accent {
+  background-image: linear-gradient(
+    100deg,
+    #C8A84E 0%,
+    #E8D48A 16%,
+    #B07D3A 33%,
+    #222831 52%,
+    #3B4257 68%,
+    #C8A84E 100%
+  );
+  background-size: 340% 100%;
+  background-position: 0% 50%;
+  animation: ir-checkout-flow 16s ease-in-out infinite;
+}
+
+/* Slow light sweep across the primary CTA (transform/opacity only) */
+@keyframes ir-checkout-sheen {
+  0%   { transform: translateX(-150%) skewX(-12deg); }
+  60%  { transform: translateX(260%) skewX(-12deg); }
+  100% { transform: translateX(260%) skewX(-12deg); }
+}
+
+.ir-checkout-sheen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.ir-checkout-sheen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 38%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 100%
+  );
+  transform: translateX(-150%) skewX(-12deg);
+  animation: ir-checkout-sheen 5.5s ease-in-out infinite;
+}
+
+/* Accessibility — freeze the continuous accents entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .ir-checkout-accent {
+    animation: none !important;
+    background-position: 50% 50%;
+  }
+  .ir-checkout-sheen::after {
+    animation: none !important;
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Shared overlay / dropdown entrances
+   ------------------------------------------------------------
+   Moved here from Navbar's `<style jsx global>` block. They were
+   only injected globally while the Navbar happened to be mounted,
+   even though Categories, productsPage, LookingForSomething and
+   OfflineBanner all use `animate-dropdown-fade` / `animate-fade-in`.
+   Defining them once in the global stylesheet makes them
+   deterministic and removes a per-render styled-jsx injection.
+
+   All four animate opacity + transform only (GPU friendly).
+   ============================================================ */
+@keyframes ir-dropdown-fade {
+  from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes ir-fade-in-simple {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ir-slide-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ir-cart-bounce {
+  0%, 100% { transform: scale(1); }
+  25%      { transform: scale(1.3); }
+  50%      { transform: scale(0.9); }
+  75%      { transform: scale(1.1); }
+}
+
+@keyframes ir-badge-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.5); opacity: 0.7; }
+  100% { transform: scale(1); }
+}
+
+.animate-dropdown-fade {
+  animation: ir-dropdown-fade 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: ir-fade-in-simple 0.2s ease-out both;
+}
+
+.animate-slide-up {
+  animation: ir-slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-cart-bounce {
+  animation: ir-cart-bounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.animate-badge-pop {
+  animation: ir-badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ============================================================
+   Hero carousel progress bar — pure CSS
+   ------------------------------------------------------------
+   Replaces a 50 ms setInterval that called setState ~20x/second and
+   animated `width` (a layout property). This animates `transform:
+   scaleX()` instead — GPU composited, zero React work, no layout.
+   The duration is still supplied inline from AUTO_PLAY_MS so the JS
+   constant stays the single source of truth.
+   ============================================================ */
+@keyframes ir-carousel-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.ir-carousel-progress {
+  transform-origin: left center;
+  animation-name: ir-carousel-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  will-change: transform;
+}
+
+/* ============================================================
+   Ambient brand accent — shared storefront accent
+   ------------------------------------------------------------
+   Same proven technique as the checkout accent (see above), but
+   defined as a general-purpose class so other high-value surfaces
+   can carry ONE consistent ambient motion instead of each page
+   inventing its own.
+
+   It deliberately REUSES the existing `ir-checkout-flow` keyframes
+   (background-position) — no duplicate keyframes, no new timing.
+   Only `background-position` moves, so no layout is ever
+   recalculated and no React state is involved.
+   ============================================================ */
+.ir-ambient {
+  background-image: linear-gradient(
+    100deg,
+    #C8A84E 0%,
+    #E8D48A 18%,
+    #B07D3A 36%,
+    #222831 58%,
+    #3B4257 74%,
+    #C8A84E 100%
+  );
+  background-size: 320% 100%;
+  background-position: 0% 50%;
+  animation: ir-checkout-flow 20s ease-in-out infinite;
+}
+
+/* ============================================================
+   Typing indicator (chat) — CSS only
+   ------------------------------------------------------------
+   Three dots whose opacity/transform cycle on staggered delays.
+   No setInterval, no React state, no layout properties.
+   ============================================================ */
+@keyframes ir-typing-dot {
+  0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+  30%           { opacity: 1;    transform: translateY(-3px); }
+}
+
+.ir-typing-dot {
+  animation: ir-typing-dot 1.2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.ir-typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.ir-typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+/* Accessibility — freeze the continuous/ambient accents entirely.
+   The global reduced-motion block above already squashes durations,
+   but infinite animations must be switched off outright so they
+   never tick a single frame. */
+@media (prefers-reduced-motion: reduce) {
+  .ir-ambient {
+    animation: none !important;
+    background-position: 50% 50%;
+  }
+  .ir-typing-dot {
+    animation: none !important;
+    opacity: 0.5;
+  }
+}
+
+
+@keyframes ir-trust-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ir-trust-item {
+  animation: ir-trust-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--stagger, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ir-trust-item {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   Ambient Architectural Grid — global decorative layer
+   ------------------------------------------------------------
+   Mounted ONCE in app/layout.tsx (Components/AnimatedBackgroundAccents.tsx)
+   so one instance covers every route — storefront, product, cart, checkout,
+   profile, chat, admin and rider. There is no per-page copy.
+
+   The layer is an asymmetric ROW × COLUMN field of rounded rectangular
+   panels — "living architecture" rather than four isolated boxes:
+     · 4 unequal columns × 4 unequal rows, selectively filled. Some slots
+       are deliberately EMPTY so the composition breathes and never reads as
+       a table, tile sheet or checkerboard.
+     · 9 fill panels — 4 gold, 2 navy, 2 near-neutral and ONE micro red
+       accent. Gold + navy + white + soft neutrals dominate; red stays an
+       accent, never a theme.
+     · 4 hairline divider lines on row/column seams (discovered, not
+       announced) and 1 slow gold highlight sweep for the "shining" quality.
+     · 16 decorative DOM nodes total — a premium effect needs no DOM
+       explosion.
+
+   Colours come from the SAME live theme custom properties the rest of the
+   storefront uses, so an Admin palette change re-tints the layer
+   automatically — nothing here is hardcoded.
+
+   Deliberate constraints:
+     · animation touches ONLY `opacity` + `transform` (+ the static
+       individual `rotate` property) — no layout, no CLS, no reflow
+     · `position: fixed` + `inset: 0` + `overflow: hidden` — never affects
+       layout, scrollbars or horizontal overflow; the grid's slight negative
+       inset is clipped here, so no 100vw/negative-margin hacks are needed
+     · `z-index: -1` — strictly behind all content, headers, modals,
+       dropdowns and interactive elements
+     · `pointer-events: none` — never intercepts a click
+     · no canvas / WebGL / SVG filters, no JS timers, no rAF, no React
+       state — zero render loop by construction
+     · tablet/mobile reduce density via `display: none` and calm down via
+       the `--ir-k` (opacity) / `--ir-m` (travel) multipliers
+     · frozen but still a fully designed composition under
+       `prefers-reduced-motion: reduce`
+   ============================================================ */
+.ir-ambient-accents {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  /*
+   * The layer doubles as the page base surface, which is what lets the
+   * full-page shells below drop their own opaque background (see the next
+   * block) without changing their apparent colour. Bound to the theme token,
+   * so a dark admin palette automatically gives a dark base and the accent
+   * fields stay readable instead of washing out.
+   */
+  background-color: var(--color-surface-page);
+
+  /*
+   * Ambient multipliers, inherited by every cell, line and sweep below.
+   * The responsive rules at the end of this block lower them so tablet and
+   * mobile get a calmer, sparser field without per-cell overrides.
+   *   --ir-k : opacity multiplier
+   *   --ir-m : travel (translate) multiplier
+   */
+  --ir-k: 1;
+  --ir-m: 1;
+}
+
+/* ------------------------------------------------------------------
+   The grid substrate — 4 deliberately UNEQUAL columns × 4 unequal rows.
+   The unequal fr values are what keep the field from reading as a table;
+   gap separates the panels into distinct architectural blocks whose
+   rounded corners leave small lens-shaped notches at the intersections.
+   `inset` bleeds a few percent past the viewport so the composition never
+   looks like a bordered card — and it is CLIPPED by the fixed,
+   overflow:hidden parent, so it can never cause horizontal scroll.
+   ------------------------------------------------------------------ */
+.ir-ambient-grid {
+  position: absolute;
+  inset: -5% -4%;
+  display: grid;
+  grid-template-columns: 1.05fr 1.55fr 1fr 1.2fr;
+  grid-template-rows: 1.3fr 0.85fr 1.2fr 0.95fr;
+  gap: clamp(6px, 1vw, 18px);
+}
+
+.ir-ambient-cell {
+  position: relative;
+  display: block;
+  /* Rounded RECTANGLE — never a circle, so real geometry is perceivable. */
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+  /* Static art-directed tilt. Individual `rotate` composes with the animated
+     `transform`, so base tilt and breathing never fight each other. */
+  rotate: var(--ir-rot, 0deg);
+  /* Resting opacity = the designed peak (multiplied by the responsive
+     --ir-k). This is also the reduced-motion state. */
+  opacity: calc(var(--ir-peak, 0.12) * var(--ir-k, 1));
+  animation-name: ir-grid-breathe;
+  animation-duration: var(--ir-dur, 18s);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-delay: var(--ir-delay, 0s);
+}
+
+/* Soft atmospheric panels: only the GRADIENT fills are blurred — 12px is
+   inside the calibrated 12–18px band, low enough that the box silhouette
+   stays legible and high enough that the gradient never bands. Flat
+   neutral/accent panels and the hairlines stay crisp ("crystal clean"),
+   which is also what keeps six fewer full-screen blur layers on the GPU. */
+.ir-ambient-cell--gold-tall,
+.ir-ambient-cell--navy-top,
+.ir-ambient-cell--gold-cell,
+.ir-ambient-cell--navy-block,
+.ir-ambient-cell--gold-hero,
+.ir-ambient-cell--gold-corner {
+  filter: blur(12px);
+}
+
+/* --- GOLD family ------------------------------------------------------ */
+
+/* A · left tall gold column (rows 1–2) — the composition's anchor: one large
+   gold area, tilted counter-clockwise, drifting on a major 18s cycle. */
+.ir-ambient-cell--gold-tall {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  --ir-peak: 0.15;
+  --ir-rot: -3deg;
+  --ir-dur: 18s;
+  --ir-delay: -2s;
+  --ir-dx: 10px;
+  --ir-dy: -16px;
+  --ir-spin: 2deg;
+  animation-name: ir-grid-drift;
+  border-radius: 2.5rem;
+  background: linear-gradient(145deg, var(--color-brand-gold), var(--color-brand-gold-hover));
+  border: 1px solid color-mix(in srgb, var(--color-brand-gold) 45%, transparent);
+  /* Restrained, low-alpha glow — 35% keeps the halo subtle even in the
+     gaps between sections where the raw ambient is fully exposed. */
+  box-shadow: 0 30px 60px -35px color-mix(in srgb, var(--color-brand-gold) 35%, transparent);
+}
+
+/* D · small gold cell (row 2, col 2) — the "one small gold cell" accent. */
+.ir-ambient-cell--gold-cell {
+  grid-column: 2;
+  grid-row: 2;
+  --ir-peak: 0.13;
+  --ir-dur: 14s;
+  --ir-delay: -4s;
+  --ir-dx: 8px;
+  --ir-dy: -8px;
+  border-radius: 1.25rem;
+  background: linear-gradient(130deg, var(--color-brand-gold-strong), var(--color-brand-gold));
+}
+
+/* H · large gold centre panel (columns 2–3, row 3) — the hero accent, with
+   the only gold hairline border + soft shadow in the field. */
+.ir-ambient-cell--gold-hero {
+  grid-column: 2 / span 2;
+  grid-row: 3;
+  --ir-peak: 0.14;
+  --ir-rot: -2deg;
+  --ir-dur: 20s;
+  --ir-delay: -9s;
+  --ir-dx: 14px;
+  --ir-dy: -18px;
+  --ir-spin: 3deg;
+  animation-name: ir-grid-drift;
+  border-radius: 2.75rem;
+  background: linear-gradient(140deg, var(--color-brand-gold), var(--color-brand-gold-strong));
+  border: 1px solid color-mix(in srgb, var(--color-brand-gold) 50%, transparent);
+  box-shadow: 0 34px 70px -40px color-mix(in srgb, var(--color-brand-gold) 40%, transparent);
+}
+
+/* K · small gold corner cell, bottom-right. */
+.ir-ambient-cell--gold-corner {
+  grid-column: 4;
+  grid-row: 4;
+  --ir-peak: 0.12;
+  --ir-dur: 17s;
+  --ir-delay: -5s;
+  --ir-dx: -8px;
+  --ir-dy: -10px;
+  border-radius: 1.5rem;
+  background: linear-gradient(150deg, var(--color-brand-gold-hover), var(--color-brand-gold-strong));
+}
+
+/* --- NAVY family ------------------------------------------------------ */
+
+/* C · wide navy panel, top-right (columns 3–4) — coolest, quietest panel;
+   low peak because navy-on-light reads much darker than gold at equal
+   opacity. */
+.ir-ambient-cell--navy-top {
+  grid-column: 3 / span 2;
+  grid-row: 1;
+  --ir-peak: 0.085;
+  --ir-rot: 1.5deg;
+  --ir-dur: 20s;
+  --ir-delay: -7s;
+  --ir-dx: -12px;
+  --ir-dy: -14px;
+  --ir-spin: -2deg;
+  animation-name: ir-grid-drift;
+  border-radius: 1.75rem;
+  background: linear-gradient(160deg, var(--color-brand-navy-soft), var(--color-brand-navy));
+}
+
+/* G · navy block, bottom-left — second drift cell, counter-tilted. */
+.ir-ambient-cell--navy-block {
+  grid-column: 1;
+  grid-row: 3;
+  --ir-peak: 0.1;
+  --ir-rot: 2.5deg;
+  --ir-dur: 16s;
+  --ir-delay: -13s;
+  --ir-dx: 6px;
+  --ir-dy: -14px;
+  --ir-spin: 2deg;
+  animation-name: ir-grid-drift;
+  border-radius: 1.5rem;
+  background: linear-gradient(120deg, var(--color-brand-navy-soft), var(--color-brand-navy));
+}
+
+/* --- NEUTRAL family (structural, crisp — near-background on purpose) --- */
+
+/* E · tall neutral panel, right (rows 2–3). Flat + crisp, so the panel is
+   read by its hairline border rather than by colour contrast. */
+.ir-ambient-cell--neutral-tall {
+  grid-column: 4;
+  grid-row: 2 / span 2;
+  --ir-peak: 0.85;
+  --ir-dur: 22s;
+  --ir-delay: -11s;
+  --ir-dx: -6px;
+  --ir-dy: -10px;
+  border-radius: 2rem;
+  background: color-mix(in srgb, var(--color-brand-navy) 7%, var(--color-surface-beige));
+  border: 1px solid color-mix(in srgb, var(--color-brand-navy) 9%, transparent);
+}
+
+/* J · quiet neutral strip along the bottom (column 3). */
+.ir-ambient-cell--neutral-strip {
+  grid-column: 3;
+  grid-row: 4;
+  --ir-peak: 0.85;
+  --ir-dur: 26s;
+  --ir-delay: -16s;
+  --ir-dx: -6px;
+  --ir-dy: -8px;
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--color-brand-navy) 6%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--color-brand-navy) 8%, transparent);
+}
+
+/* --- MICRO accent (red) ------------------------------------------------ */
+
+/* I · the ONLY red panel — smallest cell in the field (one of sixteen
+   slots, far under the ≤10% red budget), crisp so its edge does the work. */
+.ir-ambient-cell--accent {
+  grid-column: 1;
+  grid-row: 4;
+  --ir-peak: 0.1;
+  --ir-dur: 13s;
+  --ir-delay: -6s;
+  --ir-dx: 4px;
+  --ir-dy: -6px;
+  border-radius: 1rem;
+  background: var(--color-brand-accent);
+}
+
+/* --- Hairline row/column dividers ------------------------------------- */
+
+/* Four 1px seams echoing the grid's row/column boundaries. They never fade
+   to zero, so the architecture stays faintly present even between cell
+   breaths — "discovered rather than announced". */
+.ir-ambient-line {
+  position: absolute;
+  display: block;
+  background: color-mix(in srgb, var(--color-brand-navy) 55%, transparent);
+  opacity: calc(var(--ir-lo, 0.05) * var(--ir-k, 1));
+  animation: ir-grid-shimmer 18s ease-in-out infinite;
+  animation-delay: var(--ir-delay, 0s);
+}
+
+.ir-ambient-line--v1 {
+  top: -3%;
+  bottom: -3%;
+  left: 21.5%;
+  width: 1px;
+  --ir-lo: 0.05;
+  --ir-hi: 0.16;
+  animation-duration: 16s;
+  --ir-delay: -3s;
+}
+
+.ir-ambient-line--v2 {
+  top: -3%;
+  bottom: -3%;
+  left: 54%;
+  width: 1px;
+  --ir-lo: 0.04;
+  --ir-hi: 0.13;
+  animation-duration: 21s;
+  --ir-delay: -10s;
+}
+
+/* The one GOLD hairline — crosses the composition horizontally. */
+.ir-ambient-line--h1 {
+  left: -3%;
+  right: -3%;
+  top: 30%;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-brand-gold) 65%, transparent);
+  --ir-lo: 0.06;
+  --ir-hi: 0.18;
+  animation-duration: 19s;
+  --ir-delay: -7s;
+}
+
+/* Deliberately PARTIAL (46% wide) so the divider set is asymmetric. */
+.ir-ambient-line--h2 {
+  left: -3%;
+  width: 46%;
+  top: 50.5%;
+  height: 1px;
+  --ir-lo: 0.04;
+  --ir-hi: 0.12;
+  animation-duration: 24s;
+  --ir-delay: -14s;
+}
+
+/* --- The "shining" quality: one slow gold highlight sweep -------------- */
+
+.ir-ambient-sweep {
+  position: absolute;
+  top: -25%;
+  left: 0;
+  width: 26%;
+  height: 150%;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-brand-gold) 85%, transparent) 50%,
+    transparent 100%
+  );
+  filter: blur(26px);
+  /* The only continuously fast-moving element — worth pinning as a layer. */
+  will-change: transform, opacity;
+  --ir-peak: 0.1;
+  animation: ir-grid-sweep 16s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: -4s;
+}
+
+/* Drift + scale + a few degrees of rotation, plus opacity breathing — the
+   MAJOR motion language (16–20s), used by the three large structural
+   panels. Each panel supplies its own `--ir-peak`, tilt, travel vector and
+   spin. Only transform/rotate/opacity animate. Opacity breathes between
+   50% and 100% of the peak (never to zero) so the architecture always
+   stays present instead of blinking. Travel is scaled by the responsive
+   `--ir-m` multiplier. */
+@keyframes ir-grid-drift {
+  0%,
+  100% {
+    opacity: calc(var(--ir-peak, 0.14) * 0.5 * var(--ir-k, 1));
+    transform: translate3d(0, 0, 0) scale(1);
+    rotate: var(--ir-rot, 0deg);
+  }
+  50% {
+    opacity: calc(var(--ir-peak, 0.14) * var(--ir-k, 1));
+    transform: translate3d(
+      calc(var(--ir-dx, 12px) * var(--ir-m, 1)),
+      calc(var(--ir-dy, -16px) * var(--ir-m, 1)),
+      0
+    ) scale(1.05);
+    rotate: calc(var(--ir-rot, 0deg) + var(--ir-spin, 2deg));
+  }
+}
+
+/* Secondary breathing (13–26s): opacity + a short, mostly vertical travel
+   for the medium/small panels. Same 50–100% band, same multipliers. */
+@keyframes ir-grid-breathe {
+  0%,
+  100% {
+    opacity: calc(var(--ir-peak, 0.12) * 0.55 * var(--ir-k, 1));
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    opacity: calc(var(--ir-peak, 0.12) * var(--ir-k, 1));
+    transform: translate3d(
+      calc(var(--ir-dx, 7px) * var(--ir-m, 1)),
+      calc(var(--ir-dy, -10px) * var(--ir-m, 1)),
+      0
+    );
+  }
+}
+
+/* Hairline shimmer — opacity only, so a 1px line never repaints geometry. */
+@keyframes ir-grid-shimmer {
+  0%,
+  100% {
+    opacity: calc(var(--ir-lo, 0.05) * var(--ir-k, 1));
+  }
+  50% {
+    opacity: calc(var(--ir-hi, 0.15) * var(--ir-k, 1));
+  }
+}
+
+/* One gold highlight travelling across the field: ~9s of movement followed
+   by ~7s of stillness inside each 16s cycle, so it reads as an occasional
+   light sweep rather than a looping laser. */
+@keyframes ir-grid-sweep {
+  0% {
+    opacity: 0;
+    transform: translate3d(-60%, 0, 0) skewX(-16deg);
+  }
+  6% {
+    opacity: calc(var(--ir-peak, 0.1) * var(--ir-k, 1));
+  }
+  44% {
+    opacity: calc(var(--ir-peak, 0.1) * var(--ir-k, 1));
+  }
+  56%,
+  100% {
+    opacity: 0;
+    transform: translate3d(420%, 0, 0) skewX(-16deg);
+  }
+}
+
+/* ============================================================
+   Responsive density — adapt, do not merely scale down.
+   Tablet: calmer field, same composition. Mobile: far fewer visible
+   panels, softer opacity, shorter travel, fewer lines. Hiding panels with
+   `display: none` removes them from layout entirely, so nothing can ever
+   push the page sideways.
+   ============================================================ */
+@media (max-width: 1023px) {
+  .ir-ambient-accents {
+    --ir-k: 0.8;
+    --ir-m: 0.7;
+  }
+}
+
+@media (max-width: 639px) {
+  .ir-ambient-accents {
+    --ir-k: 0.62;
+    --ir-m: 0.45;
+  }
+  .ir-ambient-grid {
+    gap: 8px;
+  }
+  /* Drop the small accents and one divider so the mobile composition stays
+     simple and never competes with content. The red micro-accent and the
+     two large structural panels remain. */
+  .ir-ambient-cell--gold-cell,
+  .ir-ambient-cell--gold-corner,
+  .ir-ambient-cell--neutral-strip,
+  .ir-ambient-line--v2,
+  .ir-ambient-line--h2 {
+    display: none;
+  }
+}
+
+/* Freeze the ambient layer for reduced-motion users. Every panel is held at
+   its full designed peak (with its art-directed tilt intact), the hairlines
+   sit at their shimmer high — so the composition still looks intentional —
+   and the sweep, which is pure motion, is simply removed. */
+@media (prefers-reduced-motion: reduce) {
+  .ir-ambient-cell {
+    animation: none !important;
+    opacity: calc(var(--ir-peak, 0.12) * var(--ir-k, 1));
+    transform: none;
+  }
+  .ir-ambient-line {
+    animation: none !important;
+    opacity: calc(var(--ir-hi, 0.15) * var(--ir-k, 1));
+  }
+  .ir-ambient-sweep {
+    animation: none !important;
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Transparent page shells
+   ------------------------------------------------------------
+   The global ambient layer (z-index: -1) paints the base page surface, so the
+   full-page shells hand their own opaque background over to it. Without this
+   the layer would be covered on every route and never seen.
+
+   Only elements that carry BOTH a surface colour utility AND a full-height
+   utility are matched, so cards, inputs, panels and skeletons keep their own
+   background exactly as before. Unlayered rules outrank Tailwind's layered
+   utilities regardless of source order.
+   ============================================================ */
+.bg-surface.min-h-screen,
+.bg-surface-page.min-h-screen,
+.bg-\[\#F7F8FA\].min-h-screen,
+.bg-\[\#F8FAFC\].min-h-screen,
+.bg-surface.min-h-\[calc\(100vh-200px\)\],
+.bg-surface-page.min-h-\[calc\(100vh-200px\)\] {
+  background-color: transparent;
+}

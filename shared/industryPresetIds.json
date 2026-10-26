@@ -1,0 +1,12 @@
+{
+  "$comment": "Single source of truth for industry preset ids shared by Frontend (src/config/industryPresets.ts) and Backend (utils/showcaseConfig.js). Backend/__tests__/industryPresetParity.test.js FAILS if the three lists ever diverge. Adding an id here requires a matching preset object in the frontend library AND a matching entry in the backend list.",
+  "ids": [
+    "general",
+    "home-decor",
+    "womens-fashion",
+    "footwear",
+    "beauty",
+    "customized",
+    "custom"
+  ]
+}

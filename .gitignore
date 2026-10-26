@@ -1,0 +1,27 @@
+q.zip 
+q/ 
+node_modules/ 
+.vercel
+.env*
+nul  
+Frontend/nul 
+
+# Kilo / Playwright test artifacts
+.kilo/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+Frontend/node_modules/
+Backend/node_modules/
+
+# Next.js
+Frontend/.next/
+.next/
+
+# Logs
+*.log

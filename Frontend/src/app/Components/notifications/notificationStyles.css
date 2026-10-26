@@ -1,0 +1,169 @@
+/* ============================================================
+   Irhas'Inn — Premium Notification Overlay System
+   Brand: #C8A84E Gold | #222831 Deep Navy | White surfaces
+   Design: Center-screen light overlay · ~1-second auto-dismiss
+   ============================================================ */
+
+/* ── Toast Wrapper Override ──────────────────────────────────── */
+/* Neutralise all Toastify styling on our overlay toasts         */
+.Toastify__toast.irhasinn-overlay-toast,
+.Toastify__toast.irhasinn-overlay-toast .Toastify__toast-body {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  min-height: 0 !important;
+  cursor: default !important;
+  pointer-events: none !important;
+  transform: none !important;
+  animation: none !important;
+  transition: none !important;
+  overflow: visible !important;
+}
+
+.Toastify__toast.irhasinn-overlay-toast {
+  position: static !important;
+}
+
+.Toastify__toast-container .Toastify__toast.irhasinn-overlay-toast {
+  margin: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* ── Overlay Wrapper (fixed full-screen) ────────────────────── */
+.irhasinn-overlay-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+/* ── Backdrop ────────────────────────────────────────────────── */
+.irhasinn-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  animation: irhasinn-backdrop-enter 180ms ease-out forwards;
+}
+
+.irhasinn-overlay-exiting .irhasinn-overlay-backdrop {
+  animation: irhasinn-backdrop-exit 140ms ease-out forwards;
+}
+
+/* ── Center Card Container ───────────────────────────────────── */
+.irhasinn-overlay-card-container {
+  position: relative;
+  z-index: 1;
+  animation: irhasinn-card-enter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.irhasinn-overlay-exiting .irhasinn-overlay-card-container {
+  animation: irhasinn-card-exit 150ms ease-out forwards;
+}
+
+/* ── Progress Bar ───────────────────────────────────────────── */
+.irhasinn-overlay-progress-bar {
+  animation: irhasinn-progress-shrink 1000ms linear 0ms forwards;
+  transform-origin: left;
+}
+
+/* ── Keyframes ───────────────────────────────────────────────── */
+
+/* Card enter: fade in + slide up */
+@keyframes irhasinn-card-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Card exit: fade out + scale down */
+@keyframes irhasinn-card-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+/* Backdrop enter: fade in */
+@keyframes irhasinn-backdrop-enter {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Backdrop exit: fade out */
+@keyframes irhasinn-backdrop-exit {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Progress bar: shrink from full to zero */
+@keyframes irhasinn-progress-shrink {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* ── Reduced Motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .irhasinn-overlay-card-container,
+  .irhasinn-overlay-backdrop,
+  .irhasinn-overlay-progress-bar {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .irhasinn-overlay-card-container {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .irhasinn-overlay-backdrop {
+    opacity: 1;
+  }
+
+  .irhasinn-overlay-exiting .irhasinn-overlay-card-container {
+    opacity: 0;
+  }
+
+  .irhasinn-overlay-exiting .irhasinn-overlay-backdrop {
+    opacity: 0;
+  }
+}
+
+/* ── Responsive: small screens ───────────────────────────────── */
+@media (max-width: 480px) {
+  .irhasinn-overlay-card-container {
+    max-width: 90vw;
+  }
+}
+
+/* ── Toast Container Base ────────────────────────────────────── */
+.Toastify__toast-container {
+  z-index: 9998 !important;
+  pointer-events: none;
+}
+
+.Toastify__toast-container--top-center {
+  transform: none !important;
+  left: 50% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}

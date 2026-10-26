@@ -1,0 +1,21 @@
+# WhatsApp Web JS folders
+./.wwebjs_auth/
+/.wwebjs_auth/
+.wwebjs_auth/
+
+
+./.wwebjs_cache/
+/.wwebjs_cache/
+.wwebjs_cache/
+
+
+./node_modules
+/node_modules
+node_modules
+
+
+./.env
+/.env
+.env
+.vercel
+.env*
